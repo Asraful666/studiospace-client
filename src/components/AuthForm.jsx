@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Eye, EyeOff, Aperture } from "lucide-react";
 import toast from "react-hot-toast";
 import { authClient } from "@/lib/auth-client";
+import GoogleLoginButton from "@/components/GoogleLoginButton";
 
 function safeDestination(value) {
   if (
@@ -277,7 +278,14 @@ export default function AuthForm({ mode, next = "/" }) {
             </button>
           </fieldset>
         </form>
+<div className="divider my-6 text-xs opacity-60">
+  OR
+</div>
 
+<GoogleLoginButton
+  destination={isRegister ? "/" : destination}
+  disabled={busy}
+/>
         <p className="mt-7 text-center text-sm opacity-80">
           {isRegister ? "Already have an account? " : "New to StudioSpace? "}
           <Link href={alternateLink} className="font-semibold text-primary">
