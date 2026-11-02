@@ -121,3 +121,65 @@ body {
     scroll-behavior: auto;
   }
 }
+
+/* StudioSpace hero slider */
+.studio-hero {
+  --swiper-theme-color: #ffffff;
+  --swiper-navigation-size: 18px;
+  --swiper-pagination-color: #ffffff;
+  --swiper-pagination-bullet-inactive-color: #ffffff;
+  --swiper-pagination-bullet-inactive-opacity: 0.45;
+}
+
+.studio-hero .swiper-button-prev,
+.studio-hero .swiper-button-next {
+  width: 32px;
+  height: 44px;
+  margin-top: -22px;
+  border: 1px solid rgb(255 255 255 / 25%);
+  border-radius: 999px;
+  background: rgb(0 0 0 / 30%);
+}
+
+.studio-hero .swiper-button-prev {
+  left: 4px;
+}
+
+.studio-hero .swiper-button-next {
+  right: 4px;
+}
+
+.studio-hero .swiper-pagination {
+  bottom: 24px !important;
+}
+
+.studio-hero .swiper-pagination-bullet {
+  width: 9px;
+  height: 9px;
+}
+
+.studio-hero .swiper-pagination-bullet-active {
+  width: 28px;
+  border-radius: 999px;
+}
+
+@media (min-width: 640px) {
+  .studio-hero .swiper-button-prev,
+  .studio-hero .swiper-button-next {
+    width: 44px;
+  }
+
+  .studio-hero .swiper-button-prev {
+    left: 16px;
+  }
+
+  .studio-hero .swiper-button-next {
+    right: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .studio-hero .swiper-wrapper {
+    transition-duration: 0ms !important;
+  }
+}
