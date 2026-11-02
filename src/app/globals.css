@@ -1,26 +1,118 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@plugin "daisyui" {
+  themes: light --default, dark;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+:root,
+[data-theme="light"] {
+  --color-base-100: #ffffff;
+  --color-base-200: #f6f5fa;
+  --color-base-300: #e5e3ee;
+  --color-base-content: #20202b;
+
+  --color-primary: #7047eb;
+  --color-primary-content: #ffffff;
+
+  --color-secondary: #167d82;
+  --color-secondary-content: #ffffff;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+[data-theme="dark"] {
+  --color-base-100: #191923;
+  --color-base-200: #111119;
+  --color-base-300: #30303e;
+  --color-base-content: #eeeeF5;
+
+  --color-primary: #ab91ff;
+  --color-primary-content: #171025;
+
+  --color-secondary: #73d5cd;
+  --color-secondary-content: #102222;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 6rem;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  min-height: 100vh;
+  margin: 0;
+  background: var(--color-base-200);
+  color: var(--color-base-content);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+::selection {
+  background: var(--color-primary);
+  color: var(--color-primary-content);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 4px;
+}
+
+.site-container {
+  width: min(1200px, calc(100% - 2.5rem));
+  margin-inline: auto;
+}
+
+.section-space {
+  padding-block: clamp(3rem, 7vw, 6rem);
+}
+
+.section-title {
+  font-size: clamp(1.9rem, 4vw, 3rem);
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -0.04em;
+}
+
+.section-description {
+  max-width: 42rem;
+  line-height: 1.8;
+  opacity: 0.7;
+}
+
+.btn {
+  min-height: 2.75rem;
+  border-radius: 0.85rem;
+  font-weight: 600;
+  text-transform: none;
+}
+
+.nav-link {
+  border-radius: 0.75rem;
+  padding: 0.65rem 0.9rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.nav-link:hover {
+  background: var(--color-base-200);
+}
+
+.nav-link-active {
+  background: var(--color-base-200);
+  color: var(--color-primary);
+}
+
+.footer-link {
+  display: inline-block;
+  font-size: 0.875rem;
+  opacity: 0.7;
+}
+
+.footer-link:hover {
+  color: var(--color-primary);
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
