@@ -10,6 +10,7 @@ import {
   Clock3,
 } from "lucide-react";
 import StudioGallery from "@/components/StudioGallery";
+import BookingModal from "@/components/BookingModal";
 
 const API_URL = (
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"
@@ -208,14 +209,7 @@ export default async function StudioDetailsPage({ params }) {
             The security deposit is listed separately.
           </p>
 
-          <button
-            type="button"
-            disabled
-            aria-describedby="booking-status"
-            className="btn btn-primary mt-6 w-full"
-          >
-            Book Workspace Now
-          </button>
+         <BookingModal studio={studio} />
 
           <p
             id="booking-status"
