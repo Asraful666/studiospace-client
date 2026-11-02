@@ -9,6 +9,7 @@ const statusClasses = {
   Pending: "badge-warning",
   Confirmed: "badge-success",
   Cancelled: "badge-neutral",
+  Rejected: "badge-error",
 };
 
 function money(amount) {
