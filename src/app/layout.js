@@ -1,4 +1,5 @@
 import "./globals.css";
+
 import Providers from "@/components/Providers";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";

@@ -10,10 +10,8 @@
   --color-base-200: #f6f5fa;
   --color-base-300: #e5e3ee;
   --color-base-content: #20202b;
-
   --color-primary: #7047eb;
   --color-primary-content: #ffffff;
-
   --color-secondary: #167d82;
   --color-secondary-content: #ffffff;
 }
@@ -22,11 +20,9 @@
   --color-base-100: #191923;
   --color-base-200: #111119;
   --color-base-300: #30303e;
-  --color-base-content: #eeeeF5;
-
+  --color-base-content: #eeeef5;
   --color-primary: #ab91ff;
   --color-primary-content: #171025;
-
   --color-secondary: #73d5cd;
   --color-secondary-content: #102222;
 }
@@ -39,13 +35,13 @@ html {
 body {
   min-height: 100vh;
   margin: 0;
-  background: var(--color-base-200);
+  background-color: var(--color-base-200);
   color: var(--color-base-content);
   font-family: Arial, Helvetica, sans-serif;
 }
 
 ::selection {
-  background: var(--color-primary);
+  background-color: var(--color-primary);
   color: var(--color-primary-content);
 }
 
@@ -84,20 +80,29 @@ body {
 }
 
 .nav-link {
+  display: inline-flex;
+  align-items: center;
   border-radius: 0.75rem;
   padding: 0.65rem 0.9rem;
   font-size: 0.875rem;
   font-weight: 600;
-  transition: background-color 150ms ease, color 150ms ease;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
 }
 
 .nav-link:hover {
-  background: var(--color-base-200);
+  background-color: var(--color-base-200);
 }
 
 .nav-link-active {
-  background: var(--color-base-200);
+  background-color: var(--color-base-200);
   color: var(--color-primary);
+}
+
+#mobile-navigation .nav-link {
+  display: flex;
+  width: 100%;
 }
 
 .footer-link {
