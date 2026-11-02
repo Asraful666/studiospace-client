@@ -1,4 +1,5 @@
 import Link from "next/link";
+import FeaturedStudios from "@/components/FeaturedStudios";
 import {
   ArrowUpRight,
   Aperture,
@@ -106,6 +107,10 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+
+<FeaturedStudios />
+
 
       <section id="how-it-works" className="bg-base-100 section-space">
         <div className="site-container">
