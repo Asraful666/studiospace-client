@@ -5,6 +5,7 @@ import Link from "next/link";
 import toast from "react-hot-toast";
 import { apiRequest } from "@/lib/api";
 import ReviewModal from "@/components/ReviewModal";
+import InvoiceButton from "@/components/InvoiceButton";
 
 const statusClasses = {
   Pending: "badge-warning",
@@ -111,6 +112,7 @@ export default function MyBookings() {
           <p className="mb-2 font-semibold text-primary">
             Your creative sessions and booking history
           </p>
+
           <h1 className="section-title">My Bookings</h1>
         </div>
 
@@ -147,7 +149,7 @@ export default function MyBookings() {
             Try again
           </button>
         </div>
-      ) : !result?.data.length ? (
+      ) : !result?.data?.length ? (
         <div className="rounded-2xl border border-base-300 p-10 text-center">
           <h2 className="text-2xl font-bold">No bookings yet</h2>
 
@@ -195,6 +197,7 @@ export default function MyBookings() {
                 <dl className="mt-6 grid grid-cols-2 gap-5 lg:grid-cols-4">
                   <div>
                     <dt className="text-sm opacity-65">Date</dt>
+
                     <dd className="mt-1 font-semibold">
                       {booking.date}
                     </dd>
@@ -202,6 +205,7 @@ export default function MyBookings() {
 
                   <div>
                     <dt className="text-sm opacity-65">Time</dt>
+
                     <dd className="mt-1 font-semibold">
                       {hourLabel(booking.startHour)}–
                       {hourLabel(booking.endHour)}
@@ -212,6 +216,7 @@ export default function MyBookings() {
                     <dt className="text-sm opacity-65">
                       Duration / guests
                     </dt>
+
                     <dd className="mt-1 font-semibold">
                       {booking.hours} hour(s) / {booking.guests} guest(s)
                     </dd>
@@ -219,6 +224,7 @@ export default function MyBookings() {
 
                   <div>
                     <dt className="text-sm opacity-65">Total quoted</dt>
+
                     <dd className="mt-1 font-semibold text-primary">
                       {money(booking.totalAmount)}
                     </dd>
@@ -250,6 +256,8 @@ export default function MyBookings() {
                       setAttempt((current) => current + 1)
                     }
                   />
+
+                  <InvoiceButton booking={booking} />
 
                   {booking.status === "Pending" && (
                     <button

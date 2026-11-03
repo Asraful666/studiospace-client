@@ -11,6 +11,7 @@ const menuLinks = [
   ["Add New Studio", "/add-studio"],
   ["My Studio Listings", "/my-listings"],
   ["My Bookings", "/my-bookings"],
+  ["Saved Studios", "/saved-studios"],
 ];
 
 export default function AuthActions({ onNavigate }) {

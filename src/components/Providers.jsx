@@ -2,6 +2,7 @@
 
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "react-hot-toast";
+import WishlistProvider from "@/components/WishlistProvider";
 
 export default function Providers({ children }) {
   return (
@@ -13,7 +14,7 @@ export default function Providers({ children }) {
       storageKey="studiospace-theme"
       disableTransitionOnChange
     >
-      {children}
+     <WishlistProvider>{children}</WishlistProvider>
 
       <Toaster
         position="top-right"

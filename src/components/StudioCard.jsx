@@ -9,6 +9,7 @@ import {
   Star,
   Users,
 } from "lucide-react";
+import WishlistButton from "@/components/WishlistButton";
 
 export default function StudioCard({ studio }) {
   const [imageFailed, setImageFailed] = useState(false);
@@ -16,6 +17,12 @@ export default function StudioCard({ studio }) {
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-base-300 bg-base-100 transition-shadow hover:shadow-lg">
       <div className="relative aspect-[4/3] overflow-hidden bg-base-300">
+      <div className="absolute bottom-3 right-3 z-10">
+  <WishlistButton
+    studioId={studio._id}
+    title={studio.title}
+  />
+</div>
         {studio.imageUrl && !imageFailed ? (
           // External uploaded images; image optimization will be configured later.
           // eslint-disable-next-line @next/next/no-img-element

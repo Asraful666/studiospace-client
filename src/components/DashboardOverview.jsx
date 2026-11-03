@@ -7,8 +7,10 @@ import {
   CalendarDays,
   CalendarCheck,
   ArrowUpRight,
+  Heart,
 } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
+
 
 const actions = [
   {
@@ -43,6 +45,14 @@ const actions = [
     label: "Booking Requests",
     icon: CalendarCheck,
   },
+  {
+  title: "Keep your favorites",
+  description:
+    "Return to the creative spaces you saved for your next project.",
+  href: "/saved-studios",
+  label: "Saved studios",
+  icon: Heart,
+},
 ];
 
 export default function DashboardOverview() {

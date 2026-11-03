@@ -28,12 +28,15 @@ async function readResponse(response) {
   return result;
 }
 
-export async function apiRequest(path, options = {}) {
+export async function apiRequest(
+  path,
+  options = {},
+  responseType = "json"
+) {
   if (!path.startsWith("/api/")) {
     throw new Error("API path must start with /api/.");
   }
 
-  // Obtain an HTTPOnly JWT cookie using the current Better Auth session.
   const tokenResponse = await fetch(`${API_URL}/api/token`, {
     method: "POST",
     credentials: "include",
@@ -43,12 +46,25 @@ export async function apiRequest(path, options = {}) {
 
   await readResponse(tokenResponse);
 
-  // Send the actual request with session and JWT cookies.
   const response = await fetch(`${API_URL}${path}`, {
     ...options,
     credentials: "include",
     cache: "no-store",
   });
+
+  if (responseType === "blob" && response.ok) {
+    if (
+      !response.headers
+        .get("content-type")
+        ?.includes("application/pdf")
+    ) {
+      throw new Error(
+        "The server did not return a PDF. Please try again."
+      );
+    }
+
+    return response.blob();
+  }
 
   return readResponse(response);
 }
