@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { apiRequest } from "@/lib/api";
+import ReviewModal from "@/components/ReviewModal";
 
 const statusClasses = {
   Pending: "badge-warning",
@@ -69,6 +70,8 @@ export default function MyBookings() {
   }, [page, attempt]);
 
   function openCancel(booking) {
+    if (cancellingRef.current) return;
+
     setSelected(booking);
     dialogRef.current?.showModal();
   }
@@ -106,7 +109,7 @@ export default function MyBookings() {
       <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
         <div>
           <p className="mb-2 font-semibold text-primary">
-            Your upcoming creative sessions
+            Your creative sessions and booking history
           </p>
           <h1 className="section-title">My Bookings</h1>
         </div>
@@ -117,14 +120,25 @@ export default function MyBookings() {
       </div>
 
       {loading ? (
-        <div className="space-y-5">
+        <div
+          className="space-y-5"
+          role="status"
+          aria-label="Loading bookings"
+        >
+          <span className="sr-only">Loading your bookings...</span>
+
           {[1, 2, 3].map((item) => (
-            <div key={item} className="skeleton h-56 rounded-2xl" />
+            <div
+              key={item}
+              className="skeleton h-56 rounded-2xl"
+              aria-hidden="true"
+            />
           ))}
         </div>
       ) : error ? (
         <div className="rounded-2xl bg-base-200 p-8">
           <p role="alert">{error}</p>
+
           <button
             type="button"
             className="btn btn-primary mt-4"
@@ -136,9 +150,11 @@ export default function MyBookings() {
       ) : !result?.data.length ? (
         <div className="rounded-2xl border border-base-300 p-10 text-center">
           <h2 className="text-2xl font-bold">No bookings yet</h2>
+
           <p className="mt-3 opacity-70">
             Find a creative space and plan your first session.
           </p>
+
           <Link href="/studios" className="btn btn-primary mt-6">
             Find a studio
           </Link>
@@ -161,6 +177,7 @@ export default function MyBookings() {
                     <h2 className="text-xl font-bold">
                       {booking.studioTitle}
                     </h2>
+
                     <p className="mt-2 text-sm opacity-65">
                       {booking.studioLocation}
                     </p>
@@ -178,7 +195,9 @@ export default function MyBookings() {
                 <dl className="mt-6 grid grid-cols-2 gap-5 lg:grid-cols-4">
                   <div>
                     <dt className="text-sm opacity-65">Date</dt>
-                    <dd className="mt-1 font-semibold">{booking.date}</dd>
+                    <dd className="mt-1 font-semibold">
+                      {booking.date}
+                    </dd>
                   </div>
 
                   <div>
@@ -190,7 +209,9 @@ export default function MyBookings() {
                   </div>
 
                   <div>
-                    <dt className="text-sm opacity-65">Duration / guests</dt>
+                    <dt className="text-sm opacity-65">
+                      Duration / guests
+                    </dt>
                     <dd className="mt-1 font-semibold">
                       {booking.hours} hour(s) / {booking.guests} guest(s)
                     </dd>
@@ -215,13 +236,20 @@ export default function MyBookings() {
                   </p>
                 )}
 
-                <div className="mt-6 flex flex-wrap gap-3">
+                <div className="mt-6 flex flex-wrap items-center gap-3">
                   <Link
                     href={`/studios/${booking.studioId}`}
                     className="btn btn-outline btn-sm"
                   >
                     View studio
                   </Link>
+
+                  <ReviewModal
+                    booking={booking}
+                    onSubmitted={() =>
+                      setAttempt((current) => current + 1)
+                    }
+                  />
 
                   {booking.status === "Pending" && (
                     <button
@@ -269,6 +297,7 @@ export default function MyBookings() {
         ref={dialogRef}
         className="modal"
         aria-labelledby="cancel-booking-title"
+        aria-describedby="cancel-booking-description"
         onCancel={(event) => {
           if (cancellingRef.current) event.preventDefault();
         }}
@@ -279,9 +308,12 @@ export default function MyBookings() {
             Cancel this booking?
           </h2>
 
-          <p className="mt-4 opacity-75">
-            Your request for “{selected?.studioTitle}” on {selected?.date}
-            {" "}will be marked Cancelled.
+          <p
+            id="cancel-booking-description"
+            className="mt-4 opacity-75"
+          >
+            Your request for “{selected?.studioTitle}” on{" "}
+            {selected?.date} will be marked Cancelled.
           </p>
 
           <div className="modal-action">
@@ -289,7 +321,11 @@ export default function MyBookings() {
               type="button"
               className="btn"
               disabled={cancelling}
-              onClick={() => dialogRef.current?.close()}
+              onClick={() => {
+                if (!cancellingRef.current) {
+                  dialogRef.current?.close();
+                }
+              }}
               autoFocus
             >
               Keep booking
@@ -304,6 +340,7 @@ export default function MyBookings() {
               {cancelling && (
                 <span className="loading loading-spinner loading-sm" />
               )}
+
               {cancelling ? "Cancelling..." : "Cancel booking"}
             </button>
           </div>

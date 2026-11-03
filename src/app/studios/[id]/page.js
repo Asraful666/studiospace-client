@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import StudioGallery from "@/components/StudioGallery";
 import BookingModal from "@/components/BookingModal";
+import StudioReviews from "@/components/StudioReviews";
 
 const API_URL = (
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"
@@ -55,6 +56,7 @@ export default async function StudioDetailsPage({ params }) {
   }
 
   const studio = result.data;
+
   const amenities = Array.isArray(studio.amenities)
     ? studio.amenities
     : [];
@@ -70,7 +72,7 @@ export default async function StudioDetailsPage({ params }) {
         href="/studios"
         className="mb-7 inline-flex items-center gap-2 text-sm font-semibold hover:text-primary"
       >
-        <ArrowLeft size={17} />
+        <ArrowLeft size={17} aria-hidden="true" />
         Back to studios
       </Link>
 
@@ -89,17 +91,21 @@ export default async function StudioDetailsPage({ params }) {
 
         <div className="mt-5 flex flex-wrap gap-x-6 gap-y-3 text-sm opacity-70">
           <span className="flex items-center gap-2">
-            <MapPin size={17} />
+            <MapPin size={17} aria-hidden="true" />
             {studio.location}
           </span>
 
           <span className="flex items-center gap-2">
-            <Users size={17} />
+            <Users size={17} aria-hidden="true" />
             Up to {studio.maxCapacity} guests
           </span>
 
           <span className="flex items-center gap-2">
-            <Star size={17} className="text-primary" />
+            <Star
+              size={17}
+              className="text-primary"
+              aria-hidden="true"
+            />
             {studio.reviewCount > 0
               ? `${Number(studio.rating).toFixed(1)} (${studio.reviewCount} reviews)`
               : "New — no reviews yet"}
@@ -136,8 +142,9 @@ export default async function StudioDetailsPage({ params }) {
                 {amenities.map((amenity) => (
                   <li key={amenity} className="flex items-center gap-3">
                     <span className="rounded-lg bg-primary/10 p-2 text-primary">
-                      <Check size={17} />
+                      <Check size={17} aria-hidden="true" />
                     </span>
+
                     <span className="text-sm">{amenity}</span>
                   </li>
                 ))}
@@ -153,12 +160,13 @@ export default async function StudioDetailsPage({ params }) {
             <h2 className="text-2xl font-bold">Meet your host</h2>
 
             <div className="mt-5 flex items-center gap-4">
-              <span className="flex size-14 items-center justify-center rounded-full bg-primary/10 text-primary">
-                <UserRound size={28} />
+              <span className="flex size-14 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                <UserRound size={28} aria-hidden="true" />
               </span>
 
               <div>
                 <h3 className="font-bold">{studio.ownerName}</h3>
+
                 <p className="mt-1 text-sm opacity-65">
                   {studio.isDemo ? "Demonstration host" : "Studio owner"}
                 </p>
@@ -166,15 +174,7 @@ export default async function StudioDetailsPage({ params }) {
             </div>
           </section>
 
-          <section className="rounded-2xl border border-base-300 bg-base-100 p-6 sm:p-8">
-            <h2 className="text-2xl font-bold">Creator reviews</h2>
-
-            <p className="mt-4 leading-7 opacity-65">
-              {studio.reviewCount > 0
-                ? "Individual review details are not available yet."
-                : "No reviews yet. Feedback from future creators will appear here."}
-            </p>
-          </section>
+          <StudioReviews studioId={String(studio._id)} />
         </div>
 
         <aside className="rounded-2xl border border-base-300 bg-base-100 p-6 shadow-sm lg:sticky lg:top-28">
@@ -184,6 +184,7 @@ export default async function StudioDetailsPage({ params }) {
             <span className="text-4xl font-extrabold tracking-tight">
               {money(studio.hourlyRate)}
             </span>
+
             <span className="ml-2 text-sm opacity-65">/ hour</span>
           </p>
 
@@ -204,18 +205,20 @@ export default async function StudioDetailsPage({ params }) {
           </dl>
 
           <p className="mt-5 flex items-start gap-2 text-sm leading-6 opacity-65">
-            <Clock3 size={18} className="mt-1 shrink-0" />
+            <Clock3
+              size={18}
+              className="mt-1 shrink-0"
+              aria-hidden="true"
+            />
             Rental cost depends on the number of hours selected.
-            The security deposit is listed separately.
+            The security deposit is added to the rental amount.
           </p>
 
-         <BookingModal studio={studio} />
+          <BookingModal studio={studio} />
 
-          <p
-            id="booking-status"
-            className="mt-3 text-center text-xs leading-5 opacity-60"
-          >
-            Online reservations are coming soon.
+          <p className="mt-3 text-center text-xs leading-5 opacity-60">
+            Requests start as Pending and require host confirmation.
+            No online payment is collected.
           </p>
         </aside>
       </div>
