@@ -9,6 +9,7 @@ const statuses = [
   "All",
   "Pending",
   "Confirmed",
+  "Completed",
   "Cancelled",
   "Rejected",
 ];
@@ -16,8 +17,33 @@ const statuses = [
 const statusClasses = {
   Pending: "badge-warning",
   Confirmed: "badge-success",
+  Completed: "badge-info",
   Cancelled: "badge-neutral",
   Rejected: "badge-error",
+};
+
+const decisionContent = {
+  Confirmed: {
+    title: "Confirm this booking?",
+    description:
+      "Confirming reserves this time slot. No payment is collected.",
+    button: "Confirm booking",
+    className: "btn-primary",
+  },
+  Rejected: {
+    title: "Reject this request?",
+    description:
+      "Rejecting closes this request. The guest can submit a new request.",
+    button: "Reject request",
+    className: "btn-error",
+  },
+  Completed: {
+    title: "Mark this session as completed?",
+    description:
+      "Only a confirmed session whose end time has passed can be completed. This does not record a payment or deposit refund.",
+    button: "Mark completed",
+    className: "btn-primary",
+  },
 };
 
 function money(amount) {
@@ -46,6 +72,10 @@ export default function HostBookings() {
   const dialogRef = useRef(null);
   const savingRef = useRef(false);
 
+  const decision = selection
+    ? decisionContent[selection.nextStatus]
+    : null;
+
   useEffect(() => {
     const controller = new AbortController();
 
@@ -66,7 +96,7 @@ export default function HostBookings() {
 
         if (controller.signal.aborted) return;
 
-        // Return to the last available page if this page became empty.
+        // Move back if changing a booking leaves this page empty.
         if (page > 1 && data.data.length === 0) {
           setPage(Math.max(1, data.pagination.totalPages));
           return;
@@ -90,6 +120,8 @@ export default function HostBookings() {
   }, [page, status, attempt]);
 
   function openDecision(booking, nextStatus) {
+    if (savingRef.current) return;
+
     setSelection({ booking, nextStatus });
     setActionError("");
     dialogRef.current?.showModal();
@@ -112,7 +144,9 @@ export default function HostBookings() {
         `/api/host/bookings/${selection.booking._id}/status`,
         {
           method: "PATCH",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+          },
           body: JSON.stringify({
             status: selection.nextStatus,
           }),
@@ -189,10 +223,14 @@ export default function HostBookings() {
       </div>
 
       {loading ? (
-        <div className="space-y-5">
-          {[1, 2, 3].map((item) => (
-            <div key={item} className="skeleton h-64 rounded-2xl" />
-          ))}
+        <div role="status" aria-label="Loading booking requests">
+          <span className="sr-only">Loading booking requests...</span>
+
+          <div className="space-y-5" aria-hidden="true">
+            {[1, 2, 3].map((item) => (
+              <div key={item} className="skeleton h-64 rounded-2xl" />
+            ))}
+          </div>
         </div>
       ) : error ? (
         <div className="rounded-2xl bg-base-200 p-8">
@@ -219,6 +257,23 @@ export default function HostBookings() {
               ? "Requests will appear here when someone books your studio."
               : "Choose another status to see more requests."}
           </p>
+
+          {status === "All" ? (
+            <Link href="/my-listings" className="btn btn-primary mt-6">
+              View my listings
+            </Link>
+          ) : (
+            <button
+              type="button"
+              className="btn btn-outline mt-6"
+              onClick={() => {
+                setStatus("All");
+                setPage(1);
+              }}
+            >
+              Show all requests
+            </button>
+          )}
         </div>
       ) : (
         <>
@@ -254,6 +309,7 @@ export default function HostBookings() {
 
                 <div className="mt-5 rounded-xl bg-base-200 p-4">
                   <p className="font-semibold">{booking.userName}</p>
+
                   <p className="mt-1 break-all text-sm opacity-70">
                     {booking.userEmail}
                   </p>
@@ -262,7 +318,9 @@ export default function HostBookings() {
                 <dl className="mt-6 grid grid-cols-2 gap-5 lg:grid-cols-4">
                   <div>
                     <dt className="text-sm opacity-65">Date</dt>
-                    <dd className="mt-1 font-semibold">{booking.date}</dd>
+                    <dd className="mt-1 font-semibold">
+                      {booking.date}
+                    </dd>
                   </div>
 
                   <div>
@@ -298,6 +356,7 @@ export default function HostBookings() {
                 {booking.note && (
                   <div className="mt-5">
                     <p className="text-sm font-semibold">Guest note</p>
+
                     <p className="mt-2 whitespace-pre-wrap break-words text-sm opacity-75">
                       {booking.note}
                     </p>
@@ -311,6 +370,16 @@ export default function HostBookings() {
                   >
                     View studio
                   </Link>
+
+                  {booking.status === "Confirmed" && (
+                    <button
+                      type="button"
+                      className="btn btn-primary btn-sm"
+                      onClick={() => openDecision(booking, "Completed")}
+                    >
+                      Mark completed
+                    </button>
+                  )}
 
                   {booking.status === "Pending" && (
                     <>
@@ -368,6 +437,7 @@ export default function HostBookings() {
         ref={dialogRef}
         className="modal"
         aria-labelledby="booking-decision-title"
+        aria-describedby="booking-decision-description"
         onCancel={(event) => {
           if (savingRef.current) event.preventDefault();
         }}
@@ -378,9 +448,7 @@ export default function HostBookings() {
       >
         <div className="modal-box">
           <h2 id="booking-decision-title" className="text-xl font-bold">
-            {selection?.nextStatus === "Confirmed"
-              ? "Confirm this booking?"
-              : "Reject this request?"}
+            {decision?.title}
           </h2>
 
           <p className="mt-4 opacity-75">
@@ -396,10 +464,11 @@ export default function HostBookings() {
             </p>
           )}
 
-          <p className="mt-4 text-sm opacity-65">
-            {selection?.nextStatus === "Confirmed"
-              ? "Confirming reserves this time slot. No payment is collected."
-              : "Rejecting closes this request. The guest can submit a new request."}
+          <p
+            id="booking-decision-description"
+            className="mt-4 text-sm opacity-65"
+          >
+            {decision?.description}
           </p>
 
           {actionError && (
@@ -421,23 +490,15 @@ export default function HostBookings() {
 
             <button
               type="button"
-              className={`btn ${
-                selection?.nextStatus === "Confirmed"
-                  ? "btn-primary"
-                  : "btn-error"
-              }`}
-              disabled={saving}
+              className={`btn ${decision?.className ?? "btn-primary"}`}
+              disabled={saving || !selection}
               onClick={submitDecision}
             >
               {saving && (
                 <span className="loading loading-spinner loading-sm" />
               )}
 
-              {saving
-                ? "Saving..."
-                : selection?.nextStatus === "Confirmed"
-                  ? "Confirm booking"
-                  : "Reject request"}
+              {saving ? "Saving..." : decision?.button}
             </button>
           </div>
         </div>

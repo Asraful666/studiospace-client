@@ -8,6 +8,7 @@ import { apiRequest } from "@/lib/api";
 const statusClasses = {
   Pending: "badge-warning",
   Confirmed: "badge-success",
+  Completed: "badge-info",
   Cancelled: "badge-neutral",
   Rejected: "badge-error",
 };
