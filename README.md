@@ -7,6 +7,9 @@ studios, film stages, podcast lounges, music suites, and workshops.
 > independent identity verification, or staffed 24/7 support are provided.
 
 
+## Live Website
+https://studiospace-client-weld-seven.vercel.app
+
 ## Repositories
 
 - Client: https://github.com/Asraful666/studiospace-client
@@ -141,8 +144,8 @@ These accounts must be registered in the database used by the running API.
 
 | Purpose | Email | Password |
 | --- | --- | --- |
-| Host | host@studiospace.example | REPLACE_WITH_CREATED_HOST_DEMO_PASSWORD |
-| Guest | guest@studiospace.example | REPLACE_WITH_CREATED_GUEST_DEMO_PASSWORD |
+| Host | host@studiospace.ex |PASSWORD : jhCUNqHL7CbxTSj |
+| Guest |guest@studiospace.exam|PASSWORD : jhCUNqHL7CbxTSj |
 
 These are demonstration accounts containing test data only.
 
