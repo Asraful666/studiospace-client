@@ -18,13 +18,36 @@ const features = [
     icon: CalendarCheck,
     title: "Follow every request",
     description:
-      "Track Pending, Confirmed, Rejected, and Cancelled bookings from your personal dashboard.",
+      "Track Pending, Confirmed, Completed, Rejected, and Cancelled bookings from your dashboard.",
   },
   {
     icon: ClipboardCheck,
-    title: "Hosts stay in control",
+    title: "Hosts review each request",
     description:
-      "Hosts review requests before confirming. Overlapping confirmed sessions are blocked.",
+      "Hosts confirm requests before the time slot is reserved. Overlapping confirmed sessions are blocked.",
+  },
+];
+
+const safeguards = [
+  {
+    title: "Liability protection",
+    description:
+      "Insurance and damage compensation are not provided in this demo. For real sessions, clarify coverage and responsibilities before booking.",
+  },
+  {
+    title: "Profile verification",
+    description:
+      "Users sign in to manage bookings, but independent identity and studio ownership verification are not available.",
+  },
+  {
+    title: "Equipment safety",
+    description:
+      "Review the listed amenities and agree on equipment condition, operating instructions, and safe handling before any real session.",
+  },
+  {
+    title: "Host support",
+    description:
+      "Our FAQs explain the booking process. A staffed 24/7 support service is not available in this demonstration.",
   },
 ];
 
@@ -40,9 +63,14 @@ const questions = [
       "You can cancel a Pending request from My Bookings. Confirmed bookings cannot currently be cancelled through the app.",
   },
   {
+    question: "When can I write a review?",
+    answer:
+      "After the session ends and the host marks your booking Completed, you can write one review from My Bookings.",
+  },
+  {
     question: "Does StudioSpace collect payment?",
     answer:
-      "Online payment is not available in this version. The displayed total includes the rental amount and security deposit, but submitting a request does not charge you.",
+      "Online payment is not available in this version. The quoted total includes rental and security deposit, but submitting a request does not charge you.",
   },
   {
     question: "Which time zone is used?",
@@ -56,21 +84,21 @@ export default function CreatorSupport() {
     <section
       id="creator-support"
       aria-labelledby="creator-support-title"
-      className="section-space border-y border-base-300 bg-base-100"
+      className="section-space scroll-mt-24 border-y border-base-300 bg-base-100"
     >
       <div className="site-container">
-        <div className="max-w-2xl">
+        <div className="max-w-3xl">
           <p className="mb-3 text-sm font-semibold text-primary">
-            Creator support
+            Host guarantee & creator support
           </p>
 
           <h2 id="creator-support-title" className="section-title">
-            More clarity. More room to create.
+            Clear expectations for every session.
           </h2>
 
           <p className="section-description mt-5">
-            Understand the costs, follow your booking, and plan your
-            session with clear expectations.
+            Understand your booking, the costs, and the limits of this
+            demonstration before planning your next project.
           </p>
         </div>
 
@@ -93,6 +121,33 @@ export default function CreatorSupport() {
           ))}
         </div>
 
+        <div className="mt-12 rounded-2xl border border-base-300 p-6 sm:p-8">
+          <h3 className="text-2xl font-bold">
+            Protection and support: what to expect
+          </h3>
+
+          <p className="mt-3 text-sm leading-7 opacity-70">
+            This educational project does not offer a commercial host
+            guarantee. The following limits apply to the current version.
+          </p>
+
+          <div className="mt-7 grid gap-6 sm:grid-cols-2">
+            {safeguards.map(({ title, description }) => (
+              <div key={title}>
+                <h4 className="font-bold">{title}</h4>
+                <p className="mt-2 text-sm leading-7 opacity-70">
+                  {description}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <Link href="/terms" className="btn btn-outline mt-7">
+            Read platform notice
+            <ArrowUpRight size={17} aria-hidden="true" />
+          </Link>
+        </div>
+
         <div className="mt-14 grid gap-8 lg:grid-cols-2">
           <div>
             <CircleHelp
@@ -106,8 +161,8 @@ export default function CreatorSupport() {
             </h3>
 
             <p className="mt-4 max-w-md text-sm leading-7 opacity-70">
-              A few things to know about requests, cancellations, and
-              pricing before you book.
+              Learn how requests, cancellations, completed sessions, and
+              reviews work.
             </p>
 
             <Link href="/studios" className="btn btn-primary mt-6">

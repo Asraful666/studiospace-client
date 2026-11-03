@@ -24,6 +24,7 @@ const navigation = [
   { label: "About us", href: "/#about" },
   { label: "Creator support", href: "/#creator-support" },
   { label: "Host your space", href: "/add-studio" },
+  { label: "Terms & platform notice", href: "/terms" },
 ];
 
 function GithubIcon() {
@@ -285,7 +286,10 @@ export default function Footer() {
 
         <div className="mt-12 flex flex-col gap-3 border-t border-base-300 pt-6 text-sm opacity-65 sm:flex-row sm:items-center sm:justify-between">
           <p>© 2026 StudioSpace. All rights reserved.</p>
-          <p>A place to create something extraordinary.</p>
+
+          <Link href="/terms" className="link link-hover">
+            Educational demo · Terms & platform notice
+          </Link>
         </div>
       </div>
     </footer>
