@@ -8,6 +8,7 @@ import {
 import HeroSlider from "@/components/HeroSlider";
 import FeaturedStudios from "@/components/FeaturedStudios";
 import StudioCategories from "@/components/StudioCategories";
+import CreatorSupport from "@/components/CreatorSupport";
 
 const steps = [
   {
@@ -80,7 +81,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
+<CreatorSupport />
       <section
         id="about"
         className="site-container section-space"
